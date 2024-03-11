@@ -1,0 +1,4 @@
+export enum UserStatusEnum {
+  NEED_TO_CHANGE_PASSWORD = "NEED_TO_CHANGE_PASSWORD",
+  ACTIVE = "ACTIVE",
+}
