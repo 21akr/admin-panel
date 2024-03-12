@@ -1,19 +1,28 @@
-import express from "express";
-import { findUserById } from "../../services";
+import express from 'express';
+import { BaseIDParams, GetUserResponse } from '../../infrastructure';
+import { Repository } from '../../database';
+import { Types } from 'mongoose';
 
-export async function GetUserByIdController(
-  req: express.Request,
-  res: express.Response,
-) {
-  const id = req?.params?.id;
+export async function GetUserByIdController(req: express.Request, res: express.Response) {
+  let response: GetUserResponse;
+  let params: BaseIDParams;
 
   try {
-    const user = await findUserById(id);
+    params = await new BaseIDParams(req.params).validate();
+  } catch (err) {
+    console.error(err);
+    return res.send(err);
+  }
+
+  try {
+    const user = await Repository.User().getById(new Types.ObjectId(params.ID));
     if (!user) {
-      res.send("user Not Found");
+      res.send('User Not Found');
     }
 
-    res.json(user);
+    response = new GetUserResponse(user);
+
+    res.send(response);
   } catch (err) {
     return res.send(err);
   }

@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 
 export interface BaseUserRequestInterface extends express.Request {
   user?: any;

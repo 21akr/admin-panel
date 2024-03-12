@@ -1,9 +1,11 @@
-import { UserEntity } from "../../entities";
-import { UserSchema } from "../../schemas";
-import { UserModel } from "../../models";
-import { Types } from "mongoose";
+import { UserEntity } from '../../entities';
+import { UserSchema } from '../../schemas';
+import { UserModel } from '../../models';
+import { FilterQuery, Types } from 'mongoose';
+import { UserRepositoryInterface } from '../../../infrastructure';
+import { BaseCRUDRepository } from '../base';
 
-export class UserRepository {
+export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> implements UserRepositoryInterface {
   async create(_user: UserEntity): Promise<UserEntity> {
     const user: UserSchema = _user.convertToSchema();
     const created = await UserModel.create(user);
@@ -12,11 +14,7 @@ export class UserRepository {
 
   async update(_user: UserEntity): Promise<UserEntity> {
     const user: UserSchema = _user.convertToSchema();
-    const updated = await UserModel.findOneAndUpdate(
-      { _id: _user.getId() },
-      { $set: user },
-      { new: true },
-    );
+    const updated = await UserModel.findOneAndUpdate({ _id: _user.getId() }, { $set: user }, { new: true });
 
     return new UserEntity().convertToEntity(updated);
   }
@@ -38,7 +36,12 @@ export class UserRepository {
     return deleted.deletedCount === 1;
   }
 
-  async list(): Promise<Array<UserEntity>> {
-    return UserModel.find({});
+  async list(filter?: FilterQuery<any>): Promise<Array<UserEntity>> {
+    const users = await UserModel.find(filter);
+    return this.multipleConverter(users, UserEntity);
+  }
+
+  async countDocumentsByFilter(filter: object): Promise<number> {
+    return UserModel.countDocuments(filter);
   }
 }

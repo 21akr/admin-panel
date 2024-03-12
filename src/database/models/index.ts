@@ -1,2 +1,2 @@
-export * from "./User.model";
-export * from "./UserSession.model";
+export * from './User.model';
+export * from './UserSession.model';

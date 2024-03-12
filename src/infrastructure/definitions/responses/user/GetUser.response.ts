@@ -1,6 +1,6 @@
-import { Types } from "mongoose";
-import { UserStatusEnum } from "../../../enums";
-import { UserEntity } from "../../../../database";
+import { Types } from 'mongoose';
+import { UserStatusEnum } from '../../../enums';
+import { UserEntity } from '../../../../database';
 
 export class GetUserResponse {
   id?: Types.ObjectId;

@@ -1,5 +1,5 @@
-import { JwtPayload, sign, verify } from "jsonwebtoken";
-import moment from "moment";
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import moment from 'moment';
 
 export class TokenService {
   protected _secret: string;
@@ -12,6 +12,7 @@ export class TokenService {
     this.buildExpiresIn(expiresIn);
     this.buildPayload(payload);
   }
+
   buildSecret(value: string): TokenService {
     this._secret = value;
     return this;

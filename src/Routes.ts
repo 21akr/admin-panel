@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   CreateUserController,
   DeleteUserByIdController,
@@ -6,11 +6,8 @@ import {
   GetUsersListController,
   LoginController,
   NewPasswordController,
-} from "./controllers";
-import {
-  UserSessionMiddleware,
-  UserTempSessionMiddleware,
-} from "./middlewares";
+} from './controllers';
+import { UserSessionMiddleware, UserTempSessionMiddleware } from './middlewares';
 
 function nestedRoutes(path: string, configure: (router) => void) {
   const router = Router({ mergeParams: true });
@@ -19,14 +16,14 @@ function nestedRoutes(path: string, configure: (router) => void) {
   return router;
 }
 
-export const routes = nestedRoutes("/user", (user) => {
-  user.post("/login", LoginController);
-  user.post("/new-password", UserTempSessionMiddleware, NewPasswordController);
+export const routes = nestedRoutes('/user', user => {
+  user.post('/login', LoginController);
+  user.post('/new-password', UserTempSessionMiddleware, NewPasswordController);
 
   user.use(UserSessionMiddleware);
 
-  user.get("/list", GetUsersListController);
-  user.post("/", CreateUserController);
-  user.get("/:id", GetUserByIdController);
-  user.delete("/:id", DeleteUserByIdController);
+  user.get('/list', GetUsersListController);
+  user.post('/', CreateUserController);
+  user.get('/:id', GetUserByIdController);
+  user.delete('/:id', DeleteUserByIdController);
 });

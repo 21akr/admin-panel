@@ -1,7 +1,7 @@
-import { Types } from "mongoose";
-import { UserEntity } from "./User.entity";
-import { UserSessionStatusEnum } from "../../infrastructure";
-import { UserSchema, UserSessionSchema } from "../schemas";
+import { Types } from 'mongoose';
+import { UserEntity } from './User.entity';
+import { UserSessionStatusEnum } from '../../infrastructure';
+import { UserSchema, UserSessionSchema } from '../schemas';
 
 export class UserSessionEntity {
   protected _id?: Types.ObjectId;

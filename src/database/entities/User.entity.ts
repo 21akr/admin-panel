@@ -1,6 +1,6 @@
-import { UserStatusEnum } from "../../infrastructure";
-import { UserSchema } from "../schemas";
-import { Types } from "mongoose";
+import { UserStatusEnum } from '../../infrastructure';
+import { UserSchema } from '../schemas';
+import { Types } from 'mongoose';
 
 export class UserEntity {
   protected _id?: Types.ObjectId;
@@ -56,11 +56,7 @@ export class UserEntity {
 
   convertToEntity(user: UserSchema): UserEntity {
     if (!user) return null;
-    this.buildId(user._id)
-      .buildStatus(user.status)
-      .buildPassword(user.password)
-      .buildEmail(user.email)
-      .buildFullName(user.fullName);
+    this.buildId(user._id).buildStatus(user.status).buildPassword(user.password).buildEmail(user.email).buildFullName(user.fullName);
     return this;
   }
 

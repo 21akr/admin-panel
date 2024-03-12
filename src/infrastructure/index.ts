@@ -1,3 +1,3 @@
-export * from "./interfaces";
-export * from "./enums";
-export * from "./definitions";
+export * from './interfaces';
+export * from './enums';
+export * from './definitions';

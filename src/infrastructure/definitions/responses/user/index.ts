@@ -1,1 +1,1 @@
-export * from "./GetUser.response";
+export * from './GetUser.response';

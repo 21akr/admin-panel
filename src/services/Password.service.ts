@@ -1,4 +1,4 @@
-import { hash, compare, genSalt } from "bcrypt";
+import { compare, genSalt, hash } from 'bcrypt';
 
 export class PasswordService {
   private _password: string;

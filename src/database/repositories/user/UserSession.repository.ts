@@ -1,9 +1,10 @@
-import { UserSessionEntity } from "../../entities";
-import { UserSessionSchema } from "../../schemas";
-import { UserModel, UserSessionModel } from "../../models";
-import { Types } from "mongoose";
+import { UserSessionEntity } from '../../entities';
+import { UserSessionSchema } from '../../schemas';
+import { UserSessionModel } from '../../models';
+import { FilterQuery, Types } from 'mongoose';
+import { BaseCRUDRepository } from '../base';
 
-export class UserSessionRepository {
+export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity, UserSessionSchema> {
   async create(_userSession: UserSessionEntity): Promise<UserSessionEntity> {
     const userSession: UserSessionSchema = _userSession.convertToSchema();
     const created = await UserSessionModel.create(userSession);
@@ -12,11 +13,7 @@ export class UserSessionRepository {
 
   async update(_userSession: UserSessionEntity): Promise<UserSessionEntity> {
     const userSession: UserSessionSchema = _userSession.convertToSchema();
-    const updated = await UserSessionModel.findOneAndUpdate(
-      { _id: _userSession.getId() },
-      { $set: userSession },
-      { new: true },
-    );
+    const updated = await UserSessionModel.findOneAndUpdate({ _id: _userSession.getId() }, { $set: userSession }, { new: true });
 
     return new UserSessionEntity().convertToEntity(updated);
   }
@@ -32,7 +29,12 @@ export class UserSessionRepository {
     return deleted.deletedCount === 1;
   }
 
-  async list(): Promise<Array<UserSessionEntity>> {
-    return UserModel.find();
+  async list(filter?: FilterQuery<any>): Promise<Array<UserSessionEntity>> {
+    const userSessions = await UserSessionModel.find(filter);
+    return this.multipleConverter(userSessions, UserSessionEntity);
+  }
+
+  async countDocumentsByFilter(filter: object): Promise<number> {
+    return UserSessionModel.countDocuments(filter);
   }
 }

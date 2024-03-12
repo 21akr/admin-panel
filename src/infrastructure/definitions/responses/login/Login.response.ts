@@ -3,8 +3,8 @@
 //   action: string;
 // }
 
-import { UserSessionStatusEnum, UserStatusEnum } from "../../../enums";
-import { UserEntity, UserSessionEntity } from "../../../../database";
+import { UserSessionStatusEnum, UserStatusEnum } from '../../../enums';
+import { UserEntity, UserSessionEntity } from '../../../../database';
 
 export class LoginResponse {
   fullName: string;
@@ -21,10 +21,7 @@ export class LoginResponse {
 
   // permissions?: Array<PermissionInterFace>;
 
-  constructor(
-    session: UserSessionEntity,
-    user: UserEntity /*permissions: Array<UserPermissionEntity>*/,
-  ) {
+  constructor(session: UserSessionEntity, user: UserEntity /*permissions: Array<UserPermissionEntity>*/) {
     if (session && user /*&& permissions*/) {
       this.fullName = user.getFullName();
       this.email = user.getEmail();

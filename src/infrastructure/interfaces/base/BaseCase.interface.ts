@@ -1,7 +1,7 @@
 interface BaseRequestInterface {
   refId?: string;
   client?: any;
-  baseLang?: "en";
+  baseLang?: 'en';
 }
 
 export type BaseCaseParamsInterface<T> = T & BaseRequestInterface;

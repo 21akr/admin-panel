@@ -1,18 +1,11 @@
-import express from "express";
-import {
-  LoginParams,
-  LoginResponse,
-  UserSessionStatusEnum,
-} from "../../infrastructure";
-import { Repository, UserSessionEntity } from "../../database";
-import { PasswordService, TokenService } from "../../services";
-import { Types } from "mongoose";
-import moment from "moment";
+import express from 'express';
+import { LoginParams, LoginResponse, UserSessionStatusEnum } from '../../infrastructure';
+import { Repository, UserSessionEntity } from '../../database';
+import { PasswordService, TokenService } from '../../services';
+import { Types } from 'mongoose';
+import moment from 'moment';
 
-export async function LoginController(
-  req: express.Request,
-  res: express.Response,
-) {
+export async function LoginController(req: express.Request, res: express.Response) {
   let params: LoginParams;
   let response: LoginResponse;
 
@@ -25,13 +18,10 @@ export async function LoginController(
 
   try {
     const user = await Repository.User().getByEmail(params.email);
-    if (!user) return "User not found";
+    if (!user) return 'user not found';
 
-    const comparePassword = await new PasswordService()
-      .buildPassword(params.password)
-      .buildHash(user.getPassword())
-      .compare();
-    if (!comparePassword) return res.send("Invalid email or password");
+    const comparePassword = await new PasswordService().buildPassword(params.password).buildHash(user.getPassword()).compare();
+    if (!comparePassword) return res.send('Invalid email or password');
 
     const JWT_EXPIRES = Number(process.env.JWT_EXPIRES);
     let session: UserSessionEntity;
@@ -45,7 +35,7 @@ export async function LoginController(
       .buildId(sessionID)
       .buildUser(userID)
       .buildExpireSeconds(JWT_EXPIRES)
-      .buildExpiresAt(moment().add(JWT_EXPIRES, "s").toDate())
+      .buildExpiresAt(moment().add(JWT_EXPIRES, 's').toDate())
       .buildStatus(UserSessionStatusEnum.ACTIVE)
       .buildAccessToken(accessToken);
 

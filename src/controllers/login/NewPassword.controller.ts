@@ -1,17 +1,9 @@
-import express from "express";
-import {
-  BaseUserRequestInterface,
-  GetUserResponse,
-  NewPasswordParams,
-  UserStatusEnum,
-} from "../../infrastructure";
-import { Repository } from "../../database";
-import { PasswordService } from "../../services";
+import express from 'express';
+import { BaseUserRequestInterface, GetUserResponse, NewPasswordParams, UserStatusEnum } from '../../infrastructure';
+import { Repository } from '../../database';
+import { PasswordService } from '../../services';
 
-export async function NewPasswordController(
-  req: BaseUserRequestInterface,
-  res: express.Response,
-) {
+export async function NewPasswordController(req: BaseUserRequestInterface, res: express.Response) {
   let params: NewPasswordParams;
   let response: GetUserResponse;
   const user = req.user;
@@ -24,17 +16,12 @@ export async function NewPasswordController(
   }
 
   try {
-    const comparePasswords = await new PasswordService()
-      .buildPassword(params.currentPassword)
-      .buildHash(user?.getPassword())
-      .compare();
+    const comparePasswords = await new PasswordService().buildPassword(params.currentPassword).buildHash(user?.getPassword()).compare();
     if (!comparePasswords) {
-      res.send("Invalid current password");
+      res.send('Invalid current password');
     }
 
-    const newPassword = await new PasswordService()
-      .buildPassword(params.newPassword)
-      .hash();
+    const newPassword = await new PasswordService().buildPassword(params.newPassword).hash();
     user.buildStatus(UserStatusEnum.ACTIVE).buildPassword(newPassword);
 
     const updated = await Repository.User().update(user);

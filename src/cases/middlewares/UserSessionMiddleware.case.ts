@@ -1,8 +1,7 @@
-import { TokenService } from "../../services";
-import { Repository, UserEntity, UserSessionEntity } from "../../database";
-import { Types } from "mongoose";
-import { UserSessionStatusEnum, UserStatusEnum } from "../../infrastructure";
-import { BaseCaseInterface } from "../../infrastructure/interfaces/base/BaseCase,interface";
+import { TokenService } from '../../services';
+import { Repository, UserEntity, UserSessionEntity } from '../../database';
+import { Types } from 'mongoose';
+import { BaseCaseInterface, UserSessionStatusEnum, UserStatusEnum } from '../../infrastructure';
 
 interface UserSessionMiddlewareCaseParams {
   accessToken: string;
@@ -14,49 +13,31 @@ export interface UserSessionMiddlewareCaseResponse {
   session: string | UserSessionEntity;
 }
 
-export class UserSessionMiddlewareCase
-  implements
-    BaseCaseInterface<
-      UserSessionMiddlewareCaseParams,
-      UserSessionMiddlewareCaseResponse
-    >
-{
-  async execute(
-    params: UserSessionMiddlewareCaseParams,
-  ): Promise<UserSessionMiddlewareCaseResponse> {
+export class UserSessionMiddlewareCase implements BaseCaseInterface<UserSessionMiddlewareCaseParams, UserSessionMiddlewareCaseResponse> {
+  async execute(params: UserSessionMiddlewareCaseParams): Promise<UserSessionMiddlewareCaseResponse> {
     try {
-      const payload = new TokenService(
-        process.env.JWT_SECRET,
-        Number(process.env.JWT_EXPIRES),
-      )
+      const payload = new TokenService(process.env.JWT_SECRET, Number(process.env.JWT_EXPIRES))
         .buildTokenService(params.accessToken)
         .verify() as UserSessionMiddlewareCaseResponse;
 
-      const session = (await Repository.UserSession().getById(
-        new Types.ObjectId(String(payload.session)),
-      )) as UserSessionEntity;
+      const session = (await Repository.UserSession().getById(new Types.ObjectId(String(payload.session)))) as UserSessionEntity;
 
       if (!session) {
-        throw "Session Not Found";
+        throw 'Session Not Found';
       }
 
       if (session.getAccessToken() !== params.accessToken) {
-        throw "Invalid Token";
+        throw 'Invalid Token';
       }
 
       if (session.getStatus() !== UserSessionStatusEnum.ACTIVE) {
-        throw "User session is not activated! Please, activate.";
+        throw 'user session is not activated! Please, activate.';
       }
 
-      const user = (await Repository.User().getById(
-        payload.user as Types.ObjectId,
-      )) as UserEntity;
+      const user = (await Repository.User().getById(payload.user as Types.ObjectId)) as UserEntity;
 
-      if (
-        user.getStatus() === UserStatusEnum.NEED_TO_CHANGE_PASSWORD &&
-        params.status === UserStatusEnum.NEED_TO_CHANGE_PASSWORD
-      ) {
-        throw "Please, change your password";
+      if (user.getStatus() === UserStatusEnum.NEED_TO_CHANGE_PASSWORD && params.status === UserStatusEnum.NEED_TO_CHANGE_PASSWORD) {
+        throw 'Please, change your password';
       }
 
       return { user, session };
@@ -66,7 +47,5 @@ export class UserSessionMiddlewareCase
   }
 }
 
-export const userSessionMiddlewareCase: BaseCaseInterface<
-  UserSessionMiddlewareCaseParams,
-  UserSessionMiddlewareCaseResponse
-> = new UserSessionMiddlewareCase();
+export const userSessionMiddlewareCase: BaseCaseInterface<UserSessionMiddlewareCaseParams, UserSessionMiddlewareCaseResponse> =
+  new UserSessionMiddlewareCase();

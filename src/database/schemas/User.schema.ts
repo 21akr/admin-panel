@@ -1,6 +1,6 @@
-import { index, prop } from "@typegoose/typegoose";
-import { UserStatusEnum } from "../../infrastructure";
-import { Types } from "mongoose";
+import { index, prop } from '@typegoose/typegoose';
+import { UserStatusEnum } from '../../infrastructure';
+import { Types } from 'mongoose';
 
 @index({ firstName: 1, lastName: 1 })
 export class UserSchema {
