@@ -1,5 +1,4 @@
 import nodemailer, { SendMailOptions } from 'nodemailer';
-import { log } from './Logger';
 
 // async function CreateTestAcc() {
 //   const acc = await nodemailer.createTestAccount();
@@ -24,10 +23,10 @@ const transporter = nodemailer.createTransport({
 export async function SendEmail(payload: SendMailOptions) {
   transporter.sendMail(payload, (err, info) => {
     if (err) {
-      log.error(err, 'Error sending email');
+      console.error(err, 'Error sending email');
       return;
     }
 
-    log.info(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+    console.log(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
   });
 }
