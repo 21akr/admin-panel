@@ -3,7 +3,7 @@ import joi from 'joi';
 export class GetUserListParams {
   search?: string;
 
-  constructor(params: GetUserListParams) {
+  constructor(params) {
     this.search = params.search;
   }
 

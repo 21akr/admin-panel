@@ -15,7 +15,7 @@ export async function GetUsersListController(req: express.Request, res: express.
   const filter: FilterQuery<any> = {};
 
   try {
-    params = await new GetUserListParams(req.body).validate();
+    params = await new GetUserListParams(req.query).validate();
   } catch (err) {
     console.error(err);
     return res.send(err);
@@ -29,16 +29,17 @@ export async function GetUsersListController(req: express.Request, res: express.
         .map((regex: string) => ({
           $or: [{ fullName: { $regex: regex, $options: 'i' } }, { email: { $regex: regex, $options: 'i' } }],
         }));
-      const getUserListParams: ListParams = {
-        filter: filter,
-      };
-      const list = await getUserListCase.execute(getUserListParams);
-
-      response.meta = list.meta;
-      response.items = list.items.map(users => new GetUserResponse(users));
-
-      res.json(response);
     }
+
+    const getUserListParams: ListParams = {
+      filter: filter,
+    };
+    const list = await getUserListCase.execute(getUserListParams);
+
+    response.meta = list.meta;
+    response.items = list.items.map(users => new GetUserResponse(users));
+
+    res.json(response);
   } catch (err) {
     console.error(err);
     return err;

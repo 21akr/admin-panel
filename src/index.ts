@@ -1,10 +1,13 @@
-import { app } from './App';
+import { App } from './App';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8000;
+let options = {
+  port: parseInt(process.env.PORT),
+  mongoUrl: `${process.env.URI}`,
+  secret: `${process.env.JWT_SECRET}`,
+};
 
-app.listen(PORT, () => {
-  console.log(`App started at http://localhost:${PORT}`);
-});
+export const app = new App(options);
+app.start();
