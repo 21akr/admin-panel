@@ -1,4 +1,5 @@
 import { compare, genSalt, hash } from 'bcrypt';
+import crypto from 'crypto';
 
 export class PasswordService {
   private _password: string;
@@ -22,14 +23,21 @@ export class PasswordService {
     return this._password;
   }
 
-  async hash(): Promise<string> {
-    const saltRounds = 5;
+  async hash(_password: string): Promise<string> {
+    const saltRounds = 10;
     const salt = await genSalt(saltRounds);
-    this._hash = await hash(this._password, salt);
+    this._hash = await hash(_password, salt);
     return this._hash;
   }
 
-  async compare(): Promise<boolean> {
-    return await compare(this._password, this._hash);
+  async compare(_password: string, _hash: string): Promise<boolean> {
+    return await compare(_password, _hash);
+  }
+
+  async newPassword(): Promise<string> {
+    return crypto
+      .randomBytes(Math.ceil(16 / 2))
+      .toString('hex')
+      .slice(0, 12);
   }
 }

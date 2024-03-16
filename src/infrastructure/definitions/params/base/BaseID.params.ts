@@ -5,7 +5,7 @@ export class BaseIDParams {
 
   constructor(params: any) {
     if (params) {
-      this.ID = params.ID;
+      this.ID = params.id;
     }
   }
 

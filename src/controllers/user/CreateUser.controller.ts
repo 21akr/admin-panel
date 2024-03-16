@@ -1,9 +1,8 @@
 import express from 'express';
-import { newPassword, PasswordService } from '../../services';
+import { PasswordService } from '../../services';
 import { SendEmail } from '../../utils';
 import { CreateUserParams, GetUserResponse, UserStatusEnum } from '../../infrastructure';
 import { Repository, UserEntity } from '../../database';
-import sha1 from 'sha1';
 
 export async function CreateUserController(req: express.Request, res: express.Response) {
   let response: GetUserResponse;
@@ -13,30 +12,31 @@ export async function CreateUserController(req: express.Request, res: express.Re
     params = await new CreateUserParams(req.body).validate();
   } catch (err) {
     console.error(err);
-    return res.send(err);
+    return res.status(400).send('Invalid request parameters');
   }
 
   try {
     const checkUser = await Repository.User().getByEmail(params.email);
     if (checkUser) {
-      return res.send('This email belongs to an active user.');
+      return res.status(409).send('This email belongs to an existing user');
     }
 
-    const createPassword = newPassword();
-    const userPassword = new PasswordService().buildPassword(sha1(createPassword));
-    const password = await userPassword.hash();
+    const passwordService = new PasswordService();
+
+    const createPassword = await passwordService.newPassword();
+    const hashedPassword = await passwordService.hash(createPassword);
 
     const newUser = new UserEntity()
       .buildFullName(params.fullName)
       .buildEmail(params.email)
       .buildStatus(UserStatusEnum.NEED_TO_CHANGE_PASSWORD)
-      .buildPassword(password);
+      .buildPassword(hashedPassword);
 
     await SendEmail({
       from: 'test@example.com',
       to: newUser.getEmail(),
-      subject: 'Change your password',
-      text: `Login: ${newUser.getEmail()}. Password: ${userPassword.getPassword()}`,
+      subject: 'Set your password for your new account',
+      text: `Login: ${newUser.getEmail()}. Password: ${createPassword}`,
     });
 
     const created = await Repository.User().create(newUser);
@@ -44,6 +44,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
     response = new GetUserResponse(created);
     return res.send(response);
   } catch (err) {
-    return res.status(500).send(err);
+    console.error(err);
+    return res.status(500).send('Internal server error'); // Generic error message for user
   }
 }

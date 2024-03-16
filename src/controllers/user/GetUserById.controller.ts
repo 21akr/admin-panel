@@ -11,7 +11,7 @@ export async function GetUserByIdController(req: express.Request, res: express.R
     params = await new BaseIDParams(req.params).validate();
   } catch (err) {
     console.error(err);
-    return res.send(err);
+    return res.json(err);
   }
 
   try {
