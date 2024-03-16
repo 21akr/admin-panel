@@ -1,4 +1,5 @@
 import { compare, genSalt, hash } from 'bcrypt';
+import crypto from 'crypto';
 
 export class PasswordService {
   private _password: string;
@@ -31,5 +32,12 @@ export class PasswordService {
 
   async compare(): Promise<boolean> {
     return await compare(this._password, this._hash);
+  }
+
+  async newPassword() {
+    return crypto
+      .randomBytes(Math.ceil(16 / 2))
+      .toString('hex')
+      .slice(0, 12);
   }
 }

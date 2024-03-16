@@ -15,6 +15,9 @@ export async function UserTempSessionMiddleware(req: BaseUserRequestInterface, r
     });
 
     req.user = userAndSession.user;
+    if (!req.session) {
+      //
+    }
     req.session = userAndSession.session;
 
     return next();

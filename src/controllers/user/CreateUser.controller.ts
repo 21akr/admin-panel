@@ -1,5 +1,5 @@
 import express from 'express';
-import { newPassword, PasswordService } from '../../services';
+import { PasswordService } from '../../services';
 import { SendEmail } from '../../utils';
 import { CreateUserParams, GetUserResponse, UserStatusEnum } from '../../infrastructure';
 import { Repository, UserEntity } from '../../database';
@@ -22,7 +22,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
       return res.send('This email belongs to an active user.');
     }
 
-    const createPassword = newPassword();
+    const createPassword = await new PasswordService().newPassword();
     const userPassword = new PasswordService().buildPassword(sha1(createPassword));
     const password = await userPassword.hash();
 
