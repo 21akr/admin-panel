@@ -36,7 +36,7 @@ export class UserSessionMiddlewareCase implements BaseCaseInterface<UserSessionM
 
       const user = (await Repository.User().getById(payload.user as Types.ObjectId)) as UserEntity;
 
-      if (user.getStatus() === UserStatusEnum.NEED_TO_CHANGE_PASSWORD && params.status === UserStatusEnum.NEED_TO_CHANGE_PASSWORD) {
+      if (user.getStatus() === UserStatusEnum.NEED_TO_CHANGE_PASSWORD && params.status !== UserStatusEnum.NEED_TO_CHANGE_PASSWORD) {
         throw 'Please, change your password';
       }
 
