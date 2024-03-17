@@ -10,13 +10,12 @@ export async function NewPasswordController(req: BaseUserRequestInterface, res: 
     const params = await new NewPasswordParams(req.body).validate();
 
     const passwordService = new PasswordService();
-    const comparePasswords = await passwordService.buildPassword(params.currentPassword).buildHash(user?.getPassword()).compare();
-
-    if (!comparePasswords) {
-      return res.status(400).json({ error: 'Invalid current password' });
+    const isValidPassword = await new PasswordService().compare(params.currentPassword, user?.getPassword());
+    if (!isValidPassword) {
+      return res.status(401).json('Invalid login credentials');
     }
 
-    const newPassword = await passwordService.buildPassword(params.newPassword).hash();
+    const newPassword = await passwordService.hash(params.newPassword);
     user.buildStatus(UserStatusEnum.ACTIVE).buildPassword(newPassword);
 
     const updated = await Repository.User().update(user);
