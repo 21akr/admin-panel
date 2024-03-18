@@ -39,7 +39,7 @@ export async function GetUsersListController(req: express.Request, res: express.
     response.meta = list.meta;
     response.items = list.items.map(users => new GetUserResponse(users));
 
-    res.json(response);
+    return res.json(response);
   } catch (err) {
     console.error(err);
     return err;

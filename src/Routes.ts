@@ -20,9 +20,9 @@ export const routes = nestedRoutes('/user', user => {
   user.post('/', CreateUserController);
   user.post('/login', LoginController);
   user.delete('/:id', DeleteUserByIdController);
-  user.get('/list', GetUsersListController);
   user.post('/new-password', UserTempSessionMiddleware, NewPasswordController);
-  user.get('/:id', GetUserByIdController);
 
   user.use(UserSessionMiddleware);
+  user.get('/list', GetUsersListController);
+  user.get('/:id', GetUserByIdController);
 });
