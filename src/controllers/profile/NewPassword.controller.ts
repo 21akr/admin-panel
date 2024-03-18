@@ -9,7 +9,6 @@ export async function NewPasswordController(req: BaseUserRequestInterface, res: 
   try {
     const params = await new NewPasswordParams(req.body).validate();
 
-    const passwordService = new PasswordService();
     const isValidPassword = await new PasswordService().compare(params.currentPassword, user?.getPassword());
     if (!isValidPassword) {
       return res.status(401).send('Invalid login credentials');
@@ -19,6 +18,7 @@ export async function NewPasswordController(req: BaseUserRequestInterface, res: 
       return res.status(401).send('You used this password recently. Please choose a different one.');
     }
 
+    const passwordService = new PasswordService();
     const newPassword = await passwordService.hash(params.newPassword);
     user.buildStatus(UserStatusEnum.ACTIVE).buildPassword(newPassword);
 
