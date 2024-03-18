@@ -1,11 +1,10 @@
 import express from 'express';
-import session from 'express-session';
 import { routes } from './Routes';
 import * as bodyParser from 'body-parser';
+import cors from 'cors';
 import { createServer, Server as HttpServer } from 'http';
 import { MongoService } from './services/';
-
-const memoryStore = new session.MemoryStore();
+import cookieParser from 'cookie-parser';
 
 export class App {
   public server: express.Application;
@@ -27,20 +26,20 @@ export class App {
   }
 
   startServer() {
+    let corsOptions = {
+      origin: '*',
+      methods: 'GET,PUT,POST,DELETE,OPTIONS',
+      allowedHeaders: ['Content-Type', 'Authorization', 'Lang'],
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+    };
+
     this.server = express();
     this.server.use(bodyParser.urlencoded({ extended: true }));
+    this.server.use(cors(corsOptions));
     this.server.use(bodyParser.json({ limit: '50mb' }));
     this.server.use(express.json());
-
-    this.server.use(
-      session({
-        secret: this.secret,
-        resave: false,
-        saveUninitialized: true,
-        store: memoryStore,
-      }),
-    );
-
+    this.server.use(cookieParser());
     this.server.use(routes);
     this.http = createServer(this.server);
     this.http.listen(this.port).on('listening', () => {
