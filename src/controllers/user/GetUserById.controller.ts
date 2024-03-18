@@ -21,8 +21,7 @@ export async function GetUserByIdController(req: express.Request, res: express.R
     }
 
     response = new GetUserResponse(user);
-
-    res.send(response);
+    return res.json(response);
   } catch (err) {
     return res.send(err);
   }

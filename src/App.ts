@@ -1,20 +1,10 @@
 import express from 'express';
 import { routes } from './Routes';
 import * as bodyParser from 'body-parser';
+import cors from 'cors';
 import { createServer, Server as HttpServer } from 'http';
-import session from 'express-session';
 import { MongoService } from './services/';
-const memoryStore = new session.MemoryStore();
-
-// export const app = express();
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json({ limit: '50mb' }));
-// app.use(express.json());
-// app.use(routes);
-//
-// connectMongo().then(() => {
-//   log.info('Connected to DB');
-// });
+import cookieParser from 'cookie-parser';
 
 export class App {
   public server: express.Application;
@@ -30,26 +20,26 @@ export class App {
     this.secret = options.secret;
   }
 
-  start() {
+  async start() {
     this.startServer();
-    this.connectMongo();
+    await this.connectMongo();
   }
 
   startServer() {
+    let corsOptions = {
+      origin: '*',
+      methods: 'GET,PUT,POST,DELETE,OPTIONS',
+      allowedHeaders: ['Content-Type', 'Authorization', 'Lang'],
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+    };
+
     this.server = express();
     this.server.use(bodyParser.urlencoded({ extended: true }));
+    this.server.use(cors(corsOptions));
     this.server.use(bodyParser.json({ limit: '50mb' }));
     this.server.use(express.json());
-
-    this.server.use(
-      session({
-        secret: this.secret,
-        resave: false,
-        saveUninitialized: true,
-        store: memoryStore,
-      }),
-    );
-
+    this.server.use(cookieParser());
     this.server.use(routes);
     this.http = createServer(this.server);
     this.http.listen(this.port).on('listening', () => {
@@ -57,13 +47,12 @@ export class App {
     });
   }
 
-  connectMongo() {
-    this.mongo = new MongoService()
-      .buildUri(this.mongoUrl)
-      .buildOptions({ autoIndex: false })
-      .connect()
-      .then(() => {
-        console.log(`MongoDB uri: ${this.mongoUrl}`);
-      });
+  async connectMongo() {
+    try {
+      this.mongo = await new MongoService().buildUri(this.mongoUrl).buildOptions({ autoIndex: false }).connect();
+      console.log(`MongoDB uri: ${this.mongoUrl}`);
+    } catch (error) {
+      console.error('MongoDB connection error:', error);
+    }
   }
 }

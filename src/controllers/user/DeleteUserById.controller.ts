@@ -16,7 +16,7 @@ export async function DeleteUserByIdController(req: express.Request, res: expres
   try {
     const user = await Repository.User().deleteById(new Types.ObjectId(params.ID));
 
-    return res.json(`deleted: ${user}`);
+    return res.json({ deleted: user });
   } catch (err) {
     console.error(err);
     return res.send(err);
