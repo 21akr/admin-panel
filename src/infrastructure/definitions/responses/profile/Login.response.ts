@@ -14,8 +14,6 @@ export class LoginResponse {
 
   expiresAt: Date;
 
-  // permissions?: Array<PermissionInterFace>;
-
   constructor(session: UserSessionEntity, user: UserEntity) {
     if (session && user) {
       this.fullName = user.getFullName();
