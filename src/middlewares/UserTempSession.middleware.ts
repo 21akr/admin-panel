@@ -9,13 +9,10 @@ export async function UserTempSessionMiddleware(req: BaseUserRequestInterface, r
     }
 
     const accessToken = req.headers.authorization?.split(' ')[1] || '';
-    const userAndSession = await userSessionMiddlewareCase.execute({
+    req.user = await userSessionMiddlewareCase.execute({
       accessToken,
       status: UserStatusEnum.NEED_TO_CHANGE_PASSWORD,
     });
-
-    req.user = userAndSession.user;
-    req.session = userAndSession.session;
 
     return next();
   } catch (err) {

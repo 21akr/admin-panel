@@ -8,9 +8,9 @@ interface UserSessionMiddlewareCaseParams {
   status: UserStatusEnum;
 }
 
-export interface UserSessionMiddlewareCaseResponse {
+interface UserSessionMiddlewareCaseResponse {
   user: Types.ObjectId | UserEntity;
-  session: string | UserSessionEntity;
+  session: UserSessionEntity;
 }
 
 export class UserSessionMiddlewareCase implements BaseCaseInterface<UserSessionMiddlewareCaseParams, UserSessionMiddlewareCaseResponse> {
@@ -20,29 +20,29 @@ export class UserSessionMiddlewareCase implements BaseCaseInterface<UserSessionM
         .buildTokenService(params.accessToken)
         .verify() as UserSessionMiddlewareCaseResponse;
 
-      const session = (await Repository.UserSession().getById(new Types.ObjectId(String(payload.session)))) as UserSessionEntity;
+      if (!payload || !payload.user || !payload.session) {
+        throw new Error('Invalid token structure');
+      }
 
-      if (!session) {
-        throw 'Session Not Found';
+      const session = await Repository.UserSession().getById(new Types.ObjectId(String(payload.session)));
+      const user = await Repository.User().getById(payload.user as Types.ObjectId);
+
+      if (!session || session.getStatus() !== UserSessionStatusEnum.ACTIVE) {
+        throw new Error('Invalid or inactive session');
       }
 
       if (session.getAccessToken() !== params.accessToken) {
-        throw 'Invalid Token';
+        throw new Error('Invalid token');
       }
-
-      if (session.getStatus() !== UserSessionStatusEnum.ACTIVE) {
-        throw 'user session is not activated! Please, activate.';
-      }
-
-      const user = (await Repository.User().getById(payload.user as Types.ObjectId)) as UserEntity;
 
       if (user.getStatus() === UserStatusEnum.NEED_TO_CHANGE_PASSWORD && params.status !== UserStatusEnum.NEED_TO_CHANGE_PASSWORD) {
-        throw 'Please, change your password';
+        throw new Error('Please, change your password');
       }
 
       return { user, session };
     } catch (err) {
-      throw err;
+      console.error('Error during session validation:', err);
+      throw new Error('An error occurred');
     }
   }
 }

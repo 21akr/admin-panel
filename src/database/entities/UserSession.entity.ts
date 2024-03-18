@@ -13,7 +13,6 @@ export class UserSessionEntity {
   protected _usedAt?: Date;
   protected _expiresAt?: Date;
 
-  /** Builders */
   buildId(id: Types.ObjectId): UserSessionEntity {
     this._id = id;
     return this;
@@ -59,7 +58,6 @@ export class UserSessionEntity {
     return this;
   }
 
-  /** Getters */
   getUser(): Types.ObjectId | UserEntity {
     return this._user;
   }
