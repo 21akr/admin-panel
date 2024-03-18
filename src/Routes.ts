@@ -6,6 +6,7 @@ import {
   GetUsersListController,
   LoginController,
   NewPasswordController,
+  ResetPasswordController,
 } from './controllers';
 import { UserSessionMiddleware, UserTempSessionMiddleware } from './middlewares';
 
@@ -23,6 +24,7 @@ export const routes = nestedRoutes('/user', user => {
   user.post('/new-password', UserTempSessionMiddleware, NewPasswordController);
 
   user.use(UserSessionMiddleware);
+  user.post('/reset-password', ResetPasswordController);
   user.get('/list', GetUsersListController);
   user.get('/:id', GetUserByIdController);
 });
