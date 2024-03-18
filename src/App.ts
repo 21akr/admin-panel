@@ -1,20 +1,11 @@
 import express from 'express';
+import session from 'express-session';
 import { routes } from './Routes';
 import * as bodyParser from 'body-parser';
 import { createServer, Server as HttpServer } from 'http';
-import session from 'express-session';
 import { MongoService } from './services/';
-const memoryStore = new session.MemoryStore();
 
-// export const app = express();
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json({ limit: '50mb' }));
-// app.use(express.json());
-// app.use(routes);
-//
-// connectMongo().then(() => {
-//   log.info('Connected to DB');
-// });
+const memoryStore = new session.MemoryStore();
 
 export class App {
   public server: express.Application;
@@ -30,9 +21,9 @@ export class App {
     this.secret = options.secret;
   }
 
-  start() {
+  async start() {
     this.startServer();
-    this.connectMongo();
+    await this.connectMongo();
   }
 
   startServer() {
@@ -57,13 +48,12 @@ export class App {
     });
   }
 
-  connectMongo() {
-    this.mongo = new MongoService()
-      .buildUri(this.mongoUrl)
-      .buildOptions({ autoIndex: false })
-      .connect()
-      .then(() => {
-        console.log(`MongoDB uri: ${this.mongoUrl}`);
-      });
+  async connectMongo() {
+    try {
+      this.mongo = await new MongoService().buildUri(this.mongoUrl).buildOptions({ autoIndex: false }).connect();
+      console.log(`MongoDB uri: ${this.mongoUrl}`);
+    } catch (error) {
+      console.error('MongoDB connection error:', error);
+    }
   }
 }
