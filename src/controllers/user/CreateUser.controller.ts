@@ -45,6 +45,6 @@ export async function CreateUserController(req: express.Request, res: express.Re
     return res.send(response);
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Internal server error'); // Generic error message for user
+    return res.status(500).send('Internal server error');
   }
 }
