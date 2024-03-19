@@ -8,6 +8,8 @@ export class UserEntity {
   protected _email?: string;
   protected _password?: string;
   protected _status?: UserStatusEnum;
+  protected _createdAt?: Date;
+  protected _updatedAt?: Date;
 
   buildId(id: Types.ObjectId): UserEntity {
     this._id = id;
@@ -34,6 +36,16 @@ export class UserEntity {
     return this;
   }
 
+  buildCreatedAt(createdAt: Date): UserEntity {
+    this._createdAt = createdAt;
+    return this;
+  }
+
+  buildUpdatedAt(updatedAt: Date): UserEntity {
+    this._updatedAt = updatedAt;
+    return this;
+  }
+
   getFullName(): string {
     return <string>this._fullName;
   }
@@ -54,9 +66,23 @@ export class UserEntity {
     return <UserStatusEnum>this._status;
   }
 
+  getCreatedAt(): Date {
+    return this._createdAt;
+  }
+
+  getUpdatedAt(): Date {
+    return this._updatedAt;
+  }
+
   convertToEntity(user: UserSchema): UserEntity {
     if (!user) return null;
-    this.buildId(user._id).buildStatus(user.status).buildPassword(user.password).buildEmail(user.email).buildFullName(user.fullName);
+    this.buildId(user._id)
+      .buildStatus(user.status)
+      .buildPassword(user.password)
+      .buildEmail(user.email)
+      .buildFullName(user.fullName)
+      .buildCreatedAt(user.createdAt)
+      .buildUpdatedAt(user.updatedAt);
     return this;
   }
 
@@ -68,6 +94,8 @@ export class UserEntity {
           email: this.getEmail(),
           fullName: this.getFullName(),
           password: this.getPassword(),
+          createdAt: this.getCreatedAt(),
+          updatedAt: this.getUpdatedAt(),
         }
       : null;
   }

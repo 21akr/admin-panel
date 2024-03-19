@@ -4,6 +4,8 @@ import { Types } from 'mongoose';
 
 @index({ firstName: 1, lastName: 1 })
 export class UserSchema {
+  _id?: Types.ObjectId;
+
   @prop()
   fullName?: string;
 
@@ -16,5 +18,7 @@ export class UserSchema {
   @prop({ enum: UserStatusEnum, type: String })
   status?: UserStatusEnum;
 
-  _id?: Types.ObjectId;
+  createdAt?: Date;
+
+  updatedAt?: Date;
 }

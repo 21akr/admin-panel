@@ -1,17 +1,14 @@
-import { Types } from 'mongoose';
-import { UserStatusEnum } from '../../../enums';
 import { UserEntity } from '../../../../database';
+import { GetUserListResponse } from './GetUserList.response';
 
-export class GetUserResponse {
-  id?: Types.ObjectId;
-  fullName?: string;
-  email?: string;
-  status?: UserStatusEnum;
+export class GetUserResponse extends GetUserListResponse {
+  createdAt: Date;
+
+  updatedAt: Date;
 
   constructor(user: UserEntity) {
-    this.id = user.getId();
-    this.fullName = user.getFullName();
-    this.email = user.getEmail();
-    this.status = user.getStatus();
+    super(user);
+    this.createdAt = user.getCreatedAt();
+    this.updatedAt = user.getUpdatedAt();
   }
 }
