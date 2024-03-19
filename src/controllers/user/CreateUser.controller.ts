@@ -38,9 +38,9 @@ export async function CreateUserController(req: express.Request, res: express.Re
       subject: 'Set your password for your new account',
       text: `Login: ${newUser.getEmail()}. Password: ${createPassword}`,
     });
+    console.log(createPassword);
 
     const created = await Repository.User().create(newUser);
-
     response = new GetUserResponse(created);
     return res.send(response);
   } catch (err) {

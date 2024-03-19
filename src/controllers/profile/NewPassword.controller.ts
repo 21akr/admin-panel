@@ -25,7 +25,7 @@ export async function NewPasswordController(req: BaseUserRequestInterface, res: 
     const updated = await Repository.User().update(user);
     const response = new GetUserResponse(updated);
 
-    return res.json({ data: 'Password successfully changed', response });
+    return res.json({ message: 'Password successfully changed', data: response });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Internal Server Error' });
