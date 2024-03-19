@@ -23,6 +23,7 @@ export async function ResetPasswordController(req: BaseUserRequestInterface, res
       subject: 'Set your password for your new account',
       text: `Login: ${user.getEmail()}. Password: ${createPassword}`,
     });
+    console.log(createPassword);
 
     return res.send('Successfully reset! Please, change your password');
   } catch (err) {
