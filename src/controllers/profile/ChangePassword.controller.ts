@@ -1,13 +1,13 @@
-import { BaseUserRequestInterface, GetUserResponse, NewPasswordParams, UserStatusEnum } from '../../infrastructure';
+import { BaseUserRequestInterface, GetUserResponse, ChangePasswordParams, UserStatusEnum } from '../../infrastructure';
 import { Repository } from '../../database';
 import { PasswordService } from '../../services';
 import express from 'express';
 
-export async function NewPasswordController(req: BaseUserRequestInterface, res: express.Response) {
+export async function ChangePasswordController(req: BaseUserRequestInterface, res: express.Response) {
   const user = req.user.user;
 
   try {
-    const params = await new NewPasswordParams(req.body).validate();
+    const params = await new ChangePasswordParams(req.body).validate();
 
     const isValidPassword = await new PasswordService().compare(params.currentPassword, user?.getPassword());
     if (!isValidPassword) {
