@@ -1,11 +1,11 @@
 import express from 'express';
 import { BaseUserRequestInterface, UserStatusEnum } from '../../infrastructure';
 import { PasswordService } from '../../services';
-import { Repository } from '../../database';
+import { Repository, UserEntity } from '../../database';
 import { SendEmail } from '../../utils';
 
 export async function ResetPasswordController(req: BaseUserRequestInterface, res: express.Response) {
-  const user = req.user;
+  const user: UserEntity = req.user;
 
   try {
     const passwordService = new PasswordService();

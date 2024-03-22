@@ -1,11 +1,11 @@
 import express from 'express';
-import { BaseListInterface, GetUserListParams, GetUserResponse, ListParams } from '../../infrastructure';
+import { BaseListInterface, GetUserListParams, GetUserListResponse, ListParams } from '../../infrastructure';
 import { FilterQuery } from 'mongoose';
 import { getUserListCase } from '../../cases/user';
 
 export async function GetUsersListController(req: express.Request, res: express.Response) {
   let params: GetUserListParams;
-  let response: BaseListInterface<GetUserResponse> = {
+  let response: BaseListInterface<GetUserListResponse> = {
     meta: {
       count: 0,
     },
@@ -37,7 +37,7 @@ export async function GetUsersListController(req: express.Request, res: express.
     const list = await getUserListCase.execute(getUserListParams);
 
     response.meta = list.meta;
-    response.items = list.items.map(users => new GetUserResponse(users));
+    response.items = list.items.map(users => new GetUserListResponse(users));
 
     return res.json(response);
   } catch (err) {
