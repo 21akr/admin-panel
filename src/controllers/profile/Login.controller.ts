@@ -13,7 +13,7 @@ export async function LoginController(req: express.Request, res: express.Respons
     params = await new LoginParams(req.body).validate();
   } catch (err) {
     console.error(err);
-    return err;
+    return res.status(400).send(`Invalid request parameters \n ${err}`);
   }
 
   try {
