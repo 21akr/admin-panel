@@ -31,7 +31,6 @@ export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity,
 
   async deleteByUserId(_user: Types.ObjectId): Promise<boolean> {
     const deleted = await UserSessionModel.deleteMany({ user: _user });
-    console.log(deleted);
     return deleted.deletedCount >= 1;
   }
 
