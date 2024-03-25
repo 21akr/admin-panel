@@ -18,7 +18,7 @@ export async function GetUsersListController(req: express.Request, res: express.
     params = await new GetUserListParams(req.query).validate();
   } catch (err) {
     console.error(err);
-    return res.send(err);
+    return res.status(400).send(`Invalid request parameters \n ${err}`);
   }
 
   try {

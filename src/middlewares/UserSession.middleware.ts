@@ -7,7 +7,6 @@ export async function UserSessionMiddleware(req: BaseUserRequestInterface, res: 
     if (!req.headers || !req.headers.authorization) {
       return res.status(401).send('Authorization header missing');
     }
-
     const accessToken = req.headers.authorization?.split(' ')[1] || '';
 
     const userAndSession = await userSessionMiddlewareCase.execute({

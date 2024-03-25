@@ -10,7 +10,7 @@ export async function DeleteUserByIdController(req: express.Request, res: expres
     params = await new BaseIDParams(req.params).validate();
   } catch (err) {
     console.error(err);
-    return res.send(err);
+    return res.status(400).send(`Invalid request parameters \n ${err}`);
   }
 
   try {
