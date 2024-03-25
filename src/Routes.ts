@@ -9,7 +9,6 @@ import {
   ResetPasswordController,
 } from './controllers';
 import { UserSessionMiddleware, UserTempSessionMiddleware } from './middlewares';
-import { ChangeEmailController } from './controllers/profile/ChangeEmail.controller';
 
 function nestedRoutes(path: string, configure: (router) => void) {
   const router = Router({ mergeParams: true });
@@ -25,7 +24,6 @@ export const routes = nestedRoutes('/user', user => {
   user.post('/change-password', UserTempSessionMiddleware, ChangePasswordController);
 
   user.use(UserSessionMiddleware);
-  user.put('/change-email', ChangeEmailController);
   user.post('/reset-password', ResetPasswordController);
   user.get('/list', GetUsersListController);
   user.get('/:id', GetUserByIdController);
