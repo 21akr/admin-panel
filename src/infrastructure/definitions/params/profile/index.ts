@@ -1,2 +1,2 @@
-export * from './Login.params';
-export * from './ChangePassword.params';
+export * from './ProfileLogin.params';
+export * from './ProfileChangePassword.params';

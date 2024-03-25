@@ -4,7 +4,7 @@ import { PasswordService } from '../../services';
 import { Repository, UserEntity } from '../../database';
 import { SendEmail } from '../../utils';
 
-export async function ResetPasswordController(req: BaseUserRequestInterface, res: express.Response) {
+export async function ProfileResetPasswordController(req: BaseUserRequestInterface, res: express.Response) {
   const user: UserEntity = req.user;
 
   try {

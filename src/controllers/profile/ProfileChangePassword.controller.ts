@@ -1,14 +1,14 @@
-import { BaseUserRequestInterface, ChangePasswordParams, GetUserResponse, UserStatusEnum } from '../../infrastructure';
+import { BaseUserRequestInterface, ProfileChangePasswordParams, GetUserResponse, UserStatusEnum } from '../../infrastructure';
 import { Repository } from '../../database';
 import { PasswordService } from '../../services';
 import express from 'express';
 
-export async function ChangePasswordController(req: BaseUserRequestInterface, res: express.Response) {
+export async function ProfileChangePasswordController(req: BaseUserRequestInterface, res: express.Response) {
   const user = req.user.user;
-  let params: ChangePasswordParams;
+  let params: ProfileChangePasswordParams;
 
   try {
-    params = await new ChangePasswordParams(req.body).validate();
+    params = await new ProfileChangePasswordParams(req.body).validate();
   } catch (err) {
     console.error(err);
     return res.status(400).send(`Invalid request parameters \n ${err}`);

@@ -1,20 +1,20 @@
 import joi from 'joi';
 
-export class ChangePasswordParams {
+export class ProfileChangePasswordParams {
   currentPassword?: string;
   newPassword?: string;
 
-  constructor(params: ChangePasswordParams) {
+  constructor(params: ProfileChangePasswordParams) {
     this.currentPassword = params.currentPassword;
     this.newPassword = params.newPassword;
   }
 
   async validate() {
-    return await ChangePasswordParamsSchema.validateAsync(this);
+    return await ProfileChangePasswordParamsSchema.validateAsync(this);
   }
 }
 
-export const ChangePasswordParamsSchema = joi.object<ChangePasswordParams>({
+export const ProfileChangePasswordParamsSchema = joi.object<ProfileChangePasswordParams>({
   currentPassword: joi.string().trim().required(),
   newPassword: joi.string().trim().required(),
 });

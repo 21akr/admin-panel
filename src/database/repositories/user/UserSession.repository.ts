@@ -3,8 +3,9 @@ import { UserSessionSchema } from '../../schemas';
 import { UserSessionModel } from '../../models';
 import { FilterQuery, Types } from 'mongoose';
 import { BaseCRUDRepository } from '../base';
+import { UserSessionRepositoryInterface } from '../../../infrastructure';
 
-export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity, UserSessionSchema> {
+export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity, UserSessionSchema> implements UserSessionRepositoryInterface {
   async create(_userSession: UserSessionEntity): Promise<UserSessionEntity> {
     const userSession: UserSessionSchema = _userSession.convertToSchema();
     const created = await UserSessionModel.create(userSession);
@@ -14,13 +15,16 @@ export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity,
   async update(_userSession: UserSessionEntity): Promise<UserSessionEntity> {
     const userSession: UserSessionSchema = _userSession.convertToSchema();
     const updated = await UserSessionModel.findOneAndUpdate({ _id: _userSession.getId() }, { $set: userSession }, { new: true });
-
     return new UserSessionEntity().convertToEntity(updated);
   }
 
   async getById(_id: Types.ObjectId): Promise<UserSessionEntity> {
     const found = await UserSessionModel.findOne({ _id });
+    return new UserSessionEntity().convertToEntity(found);
+  }
 
+  async getByUserId(_user: Types.ObjectId): Promise<UserSessionEntity> {
+    const found = await UserSessionModel.findOne({ user: _user });
     return new UserSessionEntity().convertToEntity(found);
   }
 
