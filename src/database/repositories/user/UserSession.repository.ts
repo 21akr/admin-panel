@@ -25,7 +25,6 @@ export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity,
 
   async getByUserId(_user: Types.ObjectId): Promise<UserSessionEntity> {
     const found = await UserSessionModel.findOne({ user: _user });
-    console.log(found);
     return new UserSessionEntity().convertToEntity(found);
   }
 
