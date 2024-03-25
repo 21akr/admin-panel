@@ -1,5 +1,5 @@
 import { index, prop } from '@typegoose/typegoose';
-import { UserStatusEnum } from '../../infrastructure';
+import { UserRoleEnum, UserStatusEnum } from '../../infrastructure';
 import { Types } from 'mongoose';
 
 @index({ firstName: 1, lastName: 1 })
@@ -17,6 +17,9 @@ export class UserSchema {
 
   @prop({ enum: UserStatusEnum, type: String })
   status?: UserStatusEnum;
+
+  @prop({ enum: UserRoleEnum, type: String })
+  userRole?: UserRoleEnum;
 
   createdAt?: Date;
 

@@ -2,7 +2,7 @@ import { UserEntity } from '../../entities';
 import { UserSchema } from '../../schemas';
 import { UserModel } from '../../models';
 import { FilterQuery, Types } from 'mongoose';
-import { UserRepositoryInterface } from '../../../infrastructure';
+import { UserRepositoryInterface, UserRoleEnum } from '../../../infrastructure';
 import { BaseCRUDRepository } from '../base';
 
 export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> implements UserRepositoryInterface {
@@ -39,6 +39,10 @@ export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> i
   async list(filter?: FilterQuery<any>): Promise<Array<UserEntity>> {
     const users = await UserModel.find(filter);
     return this.multipleConverter(users, UserEntity);
+  }
+
+  async isAdmin(user: UserEntity): Promise<boolean> {
+    return user.getUserRole() === UserRoleEnum.ADMIN;
   }
 
   async countDocumentsByFilter(filter: object): Promise<number> {

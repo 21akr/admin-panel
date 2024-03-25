@@ -1,4 +1,4 @@
-import { UserStatusEnum } from '../../infrastructure';
+import { UserRoleEnum, UserStatusEnum } from '../../infrastructure';
 import { UserSchema } from '../schemas';
 import { Types } from 'mongoose';
 
@@ -8,6 +8,7 @@ export class UserEntity {
   protected _email?: string;
   protected _password?: string;
   protected _status?: UserStatusEnum;
+  protected _userRole?: UserRoleEnum;
   protected _createdAt?: Date;
   protected _updatedAt?: Date;
 
@@ -33,6 +34,11 @@ export class UserEntity {
 
   buildStatus(status: UserStatusEnum): UserEntity {
     this._status = status;
+    return this;
+  }
+
+  buildUserRole(userRole: UserRoleEnum): UserEntity {
+    this._userRole = userRole;
     return this;
   }
 
@@ -66,6 +72,10 @@ export class UserEntity {
     return <UserStatusEnum>this._status;
   }
 
+  getUserRole(): UserRoleEnum {
+    return <UserRoleEnum>this._userRole;
+  }
+
   getCreatedAt(): Date {
     return this._createdAt;
   }
@@ -82,7 +92,8 @@ export class UserEntity {
       .buildEmail(user.email)
       .buildFullName(user.fullName)
       .buildCreatedAt(user.createdAt)
-      .buildUpdatedAt(user.updatedAt);
+      .buildUpdatedAt(user.updatedAt)
+      .buildUserRole(user.userRole);
     return this;
   }
 
@@ -96,6 +107,7 @@ export class UserEntity {
           password: this.getPassword(),
           createdAt: this.getCreatedAt(),
           updatedAt: this.getUpdatedAt(),
+          userRole: this.getUserRole(),
         }
       : null;
   }

@@ -12,7 +12,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
     params = await new CreateUserParams(req.body).validate();
   } catch (err) {
     console.error(err);
-    return res.status(400).send('Invalid request parameters');
+    return res.status(400).send(`Invalid request parameters \n ${err}`);
   }
 
   try {
@@ -30,6 +30,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
       .buildFullName(params.fullName)
       .buildEmail(params.email)
       .buildStatus(UserStatusEnum.NEED_TO_CHANGE_PASSWORD)
+      .buildUserRole(params.userRole)
       .buildPassword(hashedPassword);
 
     await SendEmail({
