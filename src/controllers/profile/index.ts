@@ -1,3 +1,4 @@
-export * from './Login.controller';
-export * from './ChangePassword.controller';
-export * from './ResetPassword.controller';
+export * from './ProfileLogin.controller';
+export * from './ProfileChangePassword.controller';
+export * from './ProfileResetPassword.controller';
+export * from './ProfileLogout.controller';

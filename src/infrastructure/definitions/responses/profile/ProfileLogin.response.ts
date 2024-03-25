@@ -1,7 +1,7 @@
 import { UserSessionStatusEnum, UserStatusEnum } from '../../../enums';
 import { UserEntity, UserSessionEntity } from '../../../../database';
 
-export class LoginResponse {
+export class ProfileLoginResponse {
   fullName: string;
 
   email: string;

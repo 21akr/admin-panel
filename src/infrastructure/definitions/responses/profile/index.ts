@@ -1,1 +1,1 @@
-export * from './Login.response';
+export * from './ProfileLogin.response';
