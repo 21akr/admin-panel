@@ -35,9 +35,9 @@ export async function CreateUserController(req: express.Request, res: express.Re
 
     await SendEmail({
       from: 'test@example.com',
-      to: newUser.getEmail(),
+      to: params.email,
       subject: 'Set your password for your new account',
-      text: `Login: ${newUser.getEmail()}. Password: ${createPassword}`,
+      text: `Login: ${params.email}. Password: ${createPassword}`,
     });
     console.log(createPassword);
 
