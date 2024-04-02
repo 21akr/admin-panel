@@ -9,6 +9,7 @@ export class UserEntity {
   protected _password?: string;
   protected _status?: UserStatusEnum;
   protected _userRole?: UserRoleEnum;
+  protected _confirmationCode?: number;
   protected _createdAt?: Date;
   protected _updatedAt?: Date;
 
@@ -39,6 +40,11 @@ export class UserEntity {
 
   buildUserRole(userRole: UserRoleEnum): UserEntity {
     this._userRole = userRole;
+    return this;
+  }
+
+  buildConfirmationCode(code: number): UserEntity {
+    this._confirmationCode = code;
     return this;
   }
 
@@ -74,6 +80,10 @@ export class UserEntity {
 
   getUserRole(): UserRoleEnum {
     return <UserRoleEnum>this._userRole;
+  }
+
+  getConfirmationCode(): number {
+    return <number>this._confirmationCode;
   }
 
   getCreatedAt(): Date {

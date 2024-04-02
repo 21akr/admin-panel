@@ -4,7 +4,9 @@ import {
   DeleteUserByIdController,
   GetUserByIdController,
   GetUsersListController,
+  ProfileChangeEmailController,
   ProfileChangePasswordController,
+  ProfileConfirmChangeEmailController,
   ProfileLoginController,
   ProfileLogoutController,
   ProfileResetPasswordController,
@@ -23,7 +25,7 @@ export const routes = nestedRoutes('/user', user => {
   user.post('/', CreateUserController);
   user.post('/login', ProfileLoginController);
 
-  user.post('/change-password', UserTempSessionMiddleware, ProfileChangePasswordController);
+  user.put('/change-password', UserTempSessionMiddleware, ProfileChangePasswordController);
 
   user.use(UserSessionMiddleware);
   user.delete('/:id', CheckAdminMiddleware, DeleteUserByIdController);
@@ -33,4 +35,6 @@ export const routes = nestedRoutes('/user', user => {
 
   user.post('/logout', ProfileLogoutController);
   user.post('/reset-password', ProfileResetPasswordController);
+  user.post('/change-email', ProfileChangeEmailController);
+  user.post('/confirm-change-email', ProfileConfirmChangeEmailController);
 });
