@@ -1,9 +1,0 @@
-# Node artifact files
-node_modules/
-.env
-
-# Log files
-*.log
-
-# JetBrains IDE
-.idea/
